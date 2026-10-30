@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal | User Dashboard & Job Discovery</title>
+    <meta name="description" content="Discover verified job openings from top companies, LinkedIn, Indeed, and Naukri with AI resume matching.">
+    <link rel="stylesheet" href="main.css?v=2.1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body>
+
+    <!-- ================= NAVBAR ================= -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="#home" class="logo">
+                    <i class="fa-solid fa-briefcase"></i>
+                    JobPortal
+                </a>
+
+                <ul class="menu">
+                    <li><a href="#home">Home</a></li>
+                    <li><a href="#jobs">Browse Openings</a></li>
+                    <li><a href="#resume-matcher"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Matcher</a></li>
+                    <li><a href="#categories">Categories</a></li>
+                    <li><a href="#companies">Companies</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <!-- Admin Portal Link -->
+                    <a href="admin.html" class="admin-portal-nav-btn" id="navAdminPortalBtn">
+                        <i class="fa-solid fa-shield-halved"></i> Admin Portal
+                    </a>
+
+                    <!-- User Auth Info -->
+                    <div id="navAuthArea">
+                        <a href="login.html" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                        <a href="register.html" class="register-btn"><i class="fa-solid fa-user-plus"></i> Register</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ================= HERO SECTION ================= -->
+    <section class="hero" id="home">
+        <div class="container hero-container">
+            <div class="hero-content">
+                <div class="tag">
+                    🚀 India's Multi-Platform Career Gateway
+                </div>
+                <h1>Find Your <span>Dream Job</span> Today</h1>
+                <p>
+                    Browse thousands of verified openings from direct employers, as well as live listings
+                    aggregated from <strong>LinkedIn, Indeed, and Naukri</strong>.
+                </p>
+
+                <!-- Search Bar with Dropdown Menus -->
+                <div class="search-bar" style="background: white; border-radius: 14px; padding: 8px 12px; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; box-shadow: 0 10px 30px rgba(0,0,0,0.25);">
+                    <!-- Job Role / Title Dropdown -->
+                    <div class="search-input" style="flex: 1 1 200px; display: flex; align-items: center; padding: 0 10px;">
+                        <i class="fa-solid fa-briefcase" style="color: #1565ff; margin-right: 8px;"></i>
+                        <select id="heroRoleSelect" aria-label="Select Job Role" style="width: 100%; border: none; outline: none; font-size: 14px; color: #334155; background: transparent; cursor: pointer;">
+                            <option value="">All Job Roles</option>
+                            <option value="Java">Java Developer</option>
+                            <option value="Full Stack">Full Stack Engineer</option>
+                            <option value="Frontend">Frontend Specialist</option>
+                            <option value="Data Scientist">Data Scientist & AI</option>
+                            <option value="Cloud">Cloud & DevOps Architect</option>
+                            <option value="Database">Database Administrator</option>
+                            <option value="Product Designer">Product Designer (UI/UX)</option>
+                            <option value="Cyber Security">Cyber Security Analyst</option>
+                        </select>
+                    </div>
+
+                    <!-- Location Dropdown -->
+                    <div class="search-input" style="flex: 1 1 180px; display: flex; align-items: center; padding: 0 10px; border-left: 1px solid #e2e8f0;">
+                        <i class="fa-solid fa-location-dot" style="color: #1565ff; margin-right: 8px;"></i>
+                        <select id="heroLocationSelect" aria-label="Select Location" style="width: 100%; border: none; outline: none; font-size: 14px; color: #334155; background: transparent; cursor: pointer;">
+                            <option value="">All Locations</option>
+                            <option value="Bengaluru">Bengaluru, Karnataka</option>
+                            <option value="Hyderabad">Hyderabad, Telangana</option>
+                            <option value="Pune">Pune, Maharashtra</option>
+                            <option value="Noida">Noida, Uttar Pradesh</option>
+                            <option value="Chennai">Chennai, Tamil Nadu</option>
+                            <option value="Remote">Remote, India</option>
+                        </select>
+                    </div>
+
+                    <!-- Custom Keyword -->
+                    <div class="search-input" style="flex: 1 1 160px; display: flex; align-items: center; padding: 0 10px; border-left: 1px solid #e2e8f0;">
+                        <i class="fa-solid fa-magnifying-glass" style="color: #94a3b8; margin-right: 8px;"></i>
+                        <input
+                            type="text"
+                            id="heroKeywordInput"
+                            placeholder="Skill or Company"
+                            style="width: 100%; border: none; outline: none; font-size: 14px;">
+                    </div>
+
+                    <button type="button" id="heroSearchBtn" onclick="executeHeroSearch()" style="padding: 12px 28px; border-radius: 10px; background: #1565ff; color: white; border: none; font-weight: 600; cursor: pointer; white-space: nowrap;">
+                        Search Jobs
+                    </button>
+                </div>
+
+                <div class="hero-buttons">
+                    <a href="#jobs" class="primary-btn">
+                        <i class="fa-solid fa-compass"></i> Explore All Openings
+                    </a>
+                    <a href="#resume-matcher" class="secondary-btn">
+                        <i class="fa-solid fa-file-arrow-up"></i> Upload Resume for AI Suggestions
+                    </a>
+                </div>
+
+                <div class="hero-stats">
+                    <div>
+                        <h2>500+</h2>
+                        <p>Verified Openings</p>
+                    </div>
+                    <div>
+                        <h2>4 Platforms</h2>
+                        <p>Direct, LinkedIn, Indeed, Naukri</p>
+                    </div>
+                    <div>
+                        <h2>10K+</h2>
+                        <p>Placed Job Seekers</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= AI RESUME MATCHER AGENT ================= -->
+    <section class="resume-matcher-section" id="resume-matcher">
+        <div class="container">
+            <div class="resume-matcher-card">
+                <h2>
+                    <i class="fa-solid fa-robot"></i>
+                    AI Resume Matcher Agent
+                </h2>
+                <p class="subtitle">
+                    Upload your resume file or paste your skills. Our intelligent agent analyzes your profile,
+                    extracts your competencies, and instantly matches you with the best-fitting job openings!
+                </p>
+
+                <!-- Drag & Drop / File Input Zone -->
+                <div class="upload-zone" id="dropZone" onclick="document.getElementById('resumeFileInput').click()">
+                    <i class="fa-solid fa-cloud-arrow-up"></i>
+                    <h4 id="uploadZoneTitle">Drop your Resume here or click to browse</h4>
+                    <p id="uploadZoneSubtitle">Supports PDF, DOCX, DOC, or TXT formats</p>
+                    <input type="file" id="resumeFileInput" accept=".pdf,.doc,.docx,.txt" style="display: none;" onchange="handleResumeUpload(event)">
+                </div>
+
+                <div style="margin-top: 15px; text-align: center;">
+                    <span style="color: #94a3b8; font-size: 13px;">Or paste your resume text / skills profile below:</span>
+                </div>
+
+                <div style="margin-top: 10px;">
+                    <textarea
+                        id="resumeTextManual"
+                        rows="3"
+                        placeholder="e.g. Experienced Software Engineer with 4 years in Java, Spring Boot, React, Microservices, Oracle SQL, Docker, AWS..."
+                        style="width: 100%; padding: 12px 16px; border-radius: 10px; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.2); color: white; font-size: 14px; outline: none; font-family: inherit;"></textarea>
+                </div>
+
+                <div style="margin-top: 15px; display: flex; gap: 12px; justify-content: flex-end;">
+                    <button type="button" class="clear-btn" onclick="clearResumeAnalysis()" style="background: rgba(255,255,255,0.1); color: #cbd5e1; border: 1px solid rgba(255,255,255,0.2);">
+                        Clear
+                    </button>
+                    <button type="button" id="analyzeBtn" class="primary-btn" onclick="runResumeMatcher()" style="background: linear-gradient(135deg, #0284c7, #2563eb);">
+                        <i class="fa-solid fa-wand-magic-sparkles"></i> Match Jobs with Agent
+                    </button>
+                </div>
+
+                <!-- Matcher Results Area -->
+                <div id="matcherResults" class="matcher-results">
+                    <div class="skills-detected-box">
+                        <h4><i class="fa-solid fa-check-double" style="color: #38bdf8;"></i> Detected Skills & Competencies</h4>
+                        <div id="skillsDetectedList" class="skills-tags"></div>
+                    </div>
+
+                    <h3 style="color: #ffffff; margin-bottom: 16px; font-size: 20px;">
+                        <i class="fa-solid fa-bullseye" style="color: #10b981;"></i> Top Recommended Openings for Your Profile
+                    </h3>
+
+                    <div id="matchedJobsContainer" class="matched-jobs-grid"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= BROWSE JOBS SECTION (USER DASHBOARD) ================= -->
+    <section class="jobs-section" id="jobs">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Browse Available Job Openings</h2>
+                <p>Filter by job role, city location, recruitment source, or salary range.</p>
+            </div>
+
+            <!-- Search and Filter Dropdowns -->
+            <div class="job-filters">
+                <!-- Keyword search -->
+                <input
+                    type="text"
+                    id="searchInput"
+                    class="filter-input"
+                    placeholder="Search keywords, company, skills..."
+                    aria-label="Search jobs">
+
+                <!-- Job Role / Category Dropdown -->
+                <select id="categoryFilter" class="filter-input" aria-label="Filter by Role or Category">
+                    <option value="">All Job Categories</option>
+                    <option value="Software Development">Software Development</option>
+                    <option value="Web Development">Web Development</option>
+                    <option value="Cloud & DevOps">Cloud & DevOps</option>
+                    <option value="Data Science">Data Science & AI</option>
+                    <option value="Database Management">Database Management</option>
+                    <option value="UI / UX Design">UI / UX Design</option>
+                    <option value="Cyber Security">Cyber Security</option>
+                    <option value="Marketing">Marketing</option>
+                </select>
+
+                <!-- Location Dropdown -->
+                <select id="locationFilter" class="filter-input" aria-label="Filter by Location">
+                    <option value="">All Locations</option>
+                </select>
+
+                <!-- Job Source Dropdown (Direct, LinkedIn, Indeed, Naukri) -->
+                <select id="sourceFilter" class="filter-input" aria-label="Filter by Source">
+                    <option value="">All Sources (Direct + External)</option>
+                    <option value="Direct">Direct / Employer Postings</option>
+                    <option value="LinkedIn">LinkedIn Openings</option>
+                    <option value="Indeed">Indeed Openings</option>
+                    <option value="Naukri">Naukri Openings</option>
+                </select>
+
+                <!-- Salary Sort Dropdown -->
+                <select id="salarySort" class="filter-input" aria-label="Sort by Salary">
+                    <option value="">Sort by Salary</option>
+                    <option value="lowToHigh">Salary: Low to High</option>
+                    <option value="highToLow">Salary: High to Low</option>
+                </select>
+
+                <button type="button" id="clearFilters" class="clear-btn">
+                    <i class="fa-solid fa-filter-circle-xmark"></i> Clear Filters
+                </button>
+            </div>
+
+            <p id="resultsCount" class="results-count" aria-live="polite">
+                Loading available openings...
+            </p>
+
+            <!-- Dynamic Job Cards (Candidate View: No Edit or Delete buttons) -->
+            <div id="jobList">
+                <div class="loading-state">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <p>Loading jobs...</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= POPULAR CATEGORIES ================= -->
+    <section class="categories" id="categories">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Explore by Category</h2>
+                <p>Click any category to filter matching openings in the catalog.</p>
+            </div>
+
+            <div class="category-grid">
+                <div class="category-card" onclick="filterByCategory('Software Development')">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <h3>Software Development</h3>
+                    <p>Java, Spring Boot, Microservices</p>
+                </div>
+
+                <div class="category-card" onclick="filterByCategory('Web Development')">
+                    <i class="fa-solid fa-globe"></i>
+                    <h3>Web Development</h3>
+                    <p>React, Next.js, Node.js & Full Stack</p>
+                </div>
+
+                <div class="category-card" onclick="filterByCategory('Cloud & DevOps')">
+                    <i class="fa-solid fa-cloud"></i>
+                    <h3>Cloud & DevOps</h3>
+                    <p>AWS, Azure, Docker, Kubernetes</p>
+                </div>
+
+                <div class="category-card" onclick="filterByCategory('Data Science')">
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <h3>Data Science & AI</h3>
+                    <p>Machine Learning, Python, Analytics</p>
+                </div>
+
+                <div class="category-card" onclick="filterByCategory('Database Management')">
+                    <i class="fa-solid fa-database"></i>
+                    <h3>Database Management</h3>
+                    <p>Oracle, MySQL, PostgreSQL, DBA</p>
+                </div>
+
+                <div class="category-card" onclick="filterByCategory('UI / UX Design')">
+                    <i class="fa-solid fa-palette"></i>
+                    <h3>UI / UX Design</h3>
+                    <p>Product Design, Figma, Prototypes</p>
+                </div>
+
+                <div class="category-card" onclick="filterByCategory('Cyber Security')">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <h3>Cyber Security</h3>
+                    <p>SIEM, Network Security, Auditing</p>
+                </div>
+
+                <div class="category-card" onclick="filterByCategory('Marketing')">
+                    <i class="fa-solid fa-bullhorn"></i>
+                    <h3>Marketing</h3>
+                    <p>Growth, Digital Brand, SEO</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= FEATURED COMPANIES ================= -->
+    <section class="companies" id="companies">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Featured Companies & Platforms</h2>
+                <p>Verified employers and leading talent recruitment networks.</p>
+            </div>
+
+            <div class="company-grid">
+                <div class="company-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/8/8e/Tata_logo.svg" alt="TCS Logo">
+                    <h3>TCS</h3>
+                    <span>250+ Openings</span>
+                </div>
+
+                <div class="company-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/95/Infosys_logo.svg" alt="Infosys Logo">
+                    <h3>Infosys</h3>
+                    <span>180+ Openings</span>
+                </div>
+
+                <div class="company-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/a/a0/Wipro_Primary_Logo_Color_RGB.svg" alt="Wipro Logo">
+                    <h3>Wipro</h3>
+                    <span>140+ Openings</span>
+                </div>
+
+                <div class="company-card">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/c/cd/Accenture.svg" alt="Accenture Logo">
+                    <h3>Accenture</h3>
+                    <span>210+ Openings</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= CONTACT ================= -->
+    <section class="contact" id="contact">
+        <div class="container">
+            <div class="section-heading">
+                <h2>Contact & Support</h2>
+                <p>Have questions about jobs or need assistance with your application?</p>
+            </div>
+
+            <div class="contact-box">
+                <h3>JobPortal Helpdesk</h3>
+                <p><i class="fa-solid fa-location-dot"></i> Chandigarh University, Punjab, India</p>
+                <p><i class="fa-solid fa-phone"></i> +91 9876543210</p>
+                <p><i class="fa-solid fa-envelope"></i> support@jobportal.com</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ================= APPLICATION MODAL WITH RESUME SUBMISSION ================= -->
+    <div id="applyModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <div>
+                    <h3 id="modalJobTitle">Apply for Position</h3>
+                    <p id="modalJobCompany" style="font-size: 13px; color: #64748b; margin-top: 2px;"></p>
+                </div>
+                <button type="button" class="modal-close-btn" onclick="closeApplyModal()">&times;</button>
+            </div>
+
+            <form id="applyForm" onsubmit="event.preventDefault(); submitApplication();">
+                <input type="hidden" id="modalJobId">
+
+                <div class="input-box">
+                    <label for="applicantName">Full Name *</label>
+                    <input type="text" id="applicantName" placeholder="e.g. Rahul Sharma" required>
+                </div>
+
+                <div class="input-box">
+                    <label for="applicantEmail">Email Address *</label>
+                    <input type="email" id="applicantEmail" placeholder="e.g. rahul@example.com" required>
+                </div>
+
+                <div class="input-box">
+                    <label for="applicantPhone">Phone Number *</label>
+                    <input type="tel" id="applicantPhone" placeholder="+91 9876543210" required>
+                </div>
+
+                <!-- RESUME SUBMISSION COLUMN -->
+                <div class="input-box">
+                    <label for="applicantResume">Resume Submission * (PDF, DOC, DOCX, TXT)</label>
+                    <input
+                        type="file"
+                        id="applicantResume"
+                        accept=".pdf,.doc,.docx,.txt"
+                        required
+                        style="padding: 9px 12px; background: #f8fafc; border: 1.5px dashed #cbd5e1; cursor: pointer;">
+                    <small style="color: #64748b; font-size: 12px; display: block; margin-top: 4px;">
+                        Attach your up-to-date resume for the hiring team to evaluate.
+                    </small>
+                </div>
+
+                <div class="input-box">
+                    <label for="applicantNote">Cover Note / Key Highlights (Optional)</label>
+                    <textarea id="applicantNote" rows="3" placeholder="Highlight relevant skills, years of experience, or portfolio links..."></textarea>
+                </div>
+
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeApplyModal()">Cancel</button>
+                    <button type="submit" id="submitAppBtn" class="save-btn" style="background: #10b981; border: none; color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer;">
+                        <i class="fa-solid fa-paper-plane"></i> Submit Application
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Floating Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div>
+                <h3>JobPortal</h3>
+                <p>Connecting candidates with direct corporate postings and external openings from LinkedIn, Indeed & Naukri.</p>
+            </div>
+            <div class="footer-links">
+                <a href="#home">Home</a>
+                <a href="#jobs">Browse Jobs</a>
+                <a href="#resume-matcher">AI Resume Matcher</a>
+                <a href="admin.html">Admin Portal</a>
+                <a href="#contact">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="currentYear"></span> JobPortal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Back to top button -->
+    <button type="button" id="topBtn" aria-label="Back to top" title="Back to top">
+        <i class="fa-solid fa-arrow-up"></i>
+    </button>
+
+    <script src="app.js"></script>
+</body>
+</html>

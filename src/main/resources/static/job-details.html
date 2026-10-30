@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Details | Job Portal</title>
+    <link rel="stylesheet" href="main.css?v=2.1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body class="details-page">
+
+    <!-- ================= NAVBAR ================= -->
+    <header>
+        <nav class="navbar">
+            <div class="container">
+                <a href="index.html" class="logo">
+                    <i class="fa-solid fa-briefcase"></i>
+                    JobPortal
+                </a>
+
+                <ul class="menu">
+                    <li><a href="index.html#home">Home</a></li>
+                    <li><a href="index.html#jobs">Browse Openings</a></li>
+                    <li><a href="index.html#resume-matcher"><i class="fa-solid fa-wand-magic-sparkles"></i> AI Matcher</a></li>
+                    <li><a href="index.html#categories">Categories</a></li>
+                    <li><a href="index.html#companies">Companies</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="admin.html" class="admin-portal-nav-btn" id="navAdminPortalBtn">
+                        <i class="fa-solid fa-shield-halved"></i> Admin Portal
+                    </a>
+                    <div id="navAuthArea">
+                        <a href="login.html" class="login-btn"><i class="fa-solid fa-right-to-bracket"></i> Login</a>
+                        <a href="register.html" class="register-btn"><i class="fa-solid fa-user-plus"></i> Register</a>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ================= DETAILS CONTAINER ================= -->
+    <main class="details-container container">
+        <a href="index.html#jobs" class="back-link">
+            <i class="fa-solid fa-arrow-left"></i> Back to All Jobs
+        </a>
+
+        <section id="jobDetails" class="details-card">
+            <div class="loading-state">
+                <i class="fa-solid fa-spinner fa-spin"></i>
+                <p>Loading job details...</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- ================= APPLICATION MODAL ================= -->
+    <div id="applyModal" class="modal-overlay" style="display: none;">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3 id="modalJobTitle">Apply for Job</h3>
+                <button type="button" class="modal-close-btn" onclick="closeApplyModal()">&times;</button>
+            </div>
+            <form id="applyForm" onsubmit="event.preventDefault(); submitApplication();">
+                <input type="hidden" id="modalJobId">
+                <div class="input-box">
+                    <label>Full Name</label>
+                    <input type="text" id="applicantName" placeholder="Your Full Name" required>
+                </div>
+                <div class="input-box">
+                    <label>Email Address</label>
+                    <input type="email" id="applicantEmail" placeholder="your.email@example.com" required>
+                </div>
+                <div class="input-box">
+                    <label>Phone Number *</label>
+                    <input type="tel" id="applicantPhone" placeholder="+91 9876543210" required>
+                </div>
+                <div class="input-box">
+                    <label>Resume Submission * (PDF, DOC, DOCX, TXT)</label>
+                    <input type="file" id="applicantResume" accept=".pdf,.doc,.docx,.txt" required style="padding: 8px 12px; background: #f8fafc; border: 1.5px dashed #cbd5e1; cursor: pointer;">
+                </div>
+                <div class="input-box">
+                    <label>Cover Note / Relevant Experience (Optional)</label>
+                    <textarea id="applicantNote" rows="3" placeholder="Briefly introduce yourself or mention portfolio links..."></textarea>
+                </div>
+                <div class="modal-actions">
+                    <button type="button" class="cancel-btn" onclick="closeApplyModal()">Cancel</button>
+                    <button type="submit" class="save-btn">Submit Application</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- ================= TOAST NOTIFICATION ================= -->
+    <div id="toast" class="toast"></div>
+
+    <!-- ================= FOOTER ================= -->
+    <footer class="footer">
+        <div class="container footer-content">
+            <div>
+                <h3>JobPortal</h3>
+                <p>Connecting skilled professionals with the best companies.</p>
+            </div>
+            <div class="footer-links">
+                <a href="index.html#home">Home</a>
+                <a href="index.html#jobs">Browse Jobs</a>
+                <a href="index.html#add-job">Post Job</a>
+                <a href="index.html#contact">Contact</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; <span id="currentYear"></span> JobPortal. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <script src="job-details.js"></script>
+</body>
+</html>

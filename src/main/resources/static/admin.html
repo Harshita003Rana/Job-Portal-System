@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JobPortal | Admin Dashboard</title>
+    <link rel="stylesheet" href="main.css?v=2.1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+
+<body style="background: #f1f5f9;">
+
+    <!-- ================= ADMIN HEADER ================= -->
+    <header class="admin-header">
+        <nav class="navbar">
+            <div class="container">
+                <a href="admin.html" class="logo">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    JobPortal <span class="admin-logo-sub">Admin Center</span>
+                </a>
+
+                <ul class="menu">
+                    <li><a href="#admin-overview">Overview</a></li>
+                    <li><a href="#post-job-section">Post Opening</a></li>
+                    <li><a href="#manage-jobs-section">Manage Jobs</a></li>
+                    <li><a href="#applications-section">Applications</a></li>
+                </ul>
+
+                <div class="nav-actions">
+                    <a href="index.html" class="user-portal-nav-btn">
+                        <i class="fa-solid fa-globe"></i> View User Portal
+                    </a>
+
+                    <div id="adminAuthArea">
+                        <span class="user-greeting">
+                            <i class="fa-solid fa-user-shield"></i>
+                            <span id="adminNameDisplay">Administrator</span>
+                        </span>
+                        <button type="button" class="logout-btn" onclick="logoutAdmin()">
+                            <i class="fa-solid fa-right-from-bracket"></i> Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- ================= MAIN ADMIN CONTAINER ================= -->
+    <main class="container admin-container" id="adminMainContent">
+
+        <!-- Access Guard Banner (shown if not logged in as Admin) -->
+        <div id="unauthorizedBanner" class="admin-card" style="display: none; border-left: 6px solid #ef4444; background: #fff;">
+            <div style="display: flex; align-items: center; gap: 16px;">
+                <i class="fa-solid fa-triangle-exclamation" style="font-size: 32px; color: #ef4444;"></i>
+                <div>
+                    <h3 style="color: #1e293b; margin-bottom: 4px;">Administrator Session Required</h3>
+                    <p style="color: #64748b; font-size: 14px;">
+                        You are viewing this portal in public preview mode. Please sign in with administrator credentials to post, edit, or delete job openings.
+                    </p>
+                </div>
+            </div>
+            <div style="margin-top: 18px; display: flex; gap: 12px;">
+                <a href="login.html?role=admin" class="primary-btn" style="padding: 10px 20px; font-size: 13px;">
+                    <i class="fa-solid fa-shield-halved"></i> Sign In as Administrator
+                </a>
+                <a href="index.html" class="clear-btn" style="padding: 10px 20px; font-size: 13px; text-decoration: none;">
+                    Go to User Dashboard
+                </a>
+            </div>
+        </div>
+
+        <!-- KPI Metrics Grid -->
+        <div class="admin-kpi-grid" id="admin-overview">
+            <div class="kpi-card">
+                <div class="kpi-icon"><i class="fa-solid fa-briefcase"></i></div>
+                <div class="kpi-info">
+                    <h4>Total Active Openings</h4>
+                    <h2 id="kpiTotalJobs">0</h2>
+                </div>
+            </div>
+
+            <div class="kpi-card green">
+                <div class="kpi-icon"><i class="fa-solid fa-file-lines"></i></div>
+                <div class="kpi-info">
+                    <h4>Applications Received</h4>
+                    <h2 id="kpiTotalApplications">0</h2>
+                </div>
+            </div>
+
+            <div class="kpi-card purple">
+                <div class="kpi-icon"><i class="fa-solid fa-share-nodes"></i></div>
+                <div class="kpi-info">
+                    <h4>External Openings</h4>
+                    <h2 id="kpiExternalJobs">0</h2>
+                </div>
+            </div>
+
+            <div class="kpi-card amber">
+                <div class="kpi-icon"><i class="fa-solid fa-building-circle-check"></i></div>
+                <div class="kpi-info">
+                    <h4>Direct Employer Jobs</h4>
+                    <h2 id="kpiDirectJobs">0</h2>
+                </div>
+            </div>
+        </div>
+
+        <!-- ================= POST / EDIT JOB OPENING SECTION ================= -->
+        <section id="post-job-section" class="admin-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; border-bottom: 1px solid #e2e8f0; padding-bottom: 14px;">
+                <div>
+                    <h2 id="adminFormHeading" style="font-size: 22px; color: #0f172a;">
+                        <i class="fa-solid fa-plus-circle" style="color: #1565ff;"></i> Post a New Job Opening
+                    </h2>
+                    <p style="color: #64748b; font-size: 14px; margin-top: 4px;">
+                        Add internal vacancies or curate external openings from LinkedIn, Indeed, and Naukri.
+                    </p>
+                </div>
+                <span id="editingBadge" style="display: none; background: #fef3c7; color: #92400e; font-weight: 700; padding: 4px 12px; border-radius: 50px; font-size: 12px;">
+                    Editing Mode Active
+                </span>
+            </div>
+
+            <form id="adminJobForm" onsubmit="event.preventDefault(); handleAdminSaveJob();">
+                <input type="hidden" id="adminJobId">
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px;">
+                    <div class="input-box">
+                        <label for="adminTitle" style="font-weight: 600; font-size: 13px; color: #475569; display: block; margin-bottom: 6px;">Job Title *</label>
+                        <input type="text" id="adminTitle" placeholder="e.g. Senior Java Developer" required style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+                    </div>
+
+                    <div class="input-box">
+                        <label for="adminCompany" style="font-weight: 600; font-size: 13px; color: #475569; display: block; margin-bottom: 6px;">Company Name *</label>
+                        <input type="text" id="adminCompany" placeholder="e.g. Infosys, TCS, Google" required style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+                    </div>
+
+                    <div class="input-box">
+                        <label for="adminLocation" style="font-weight: 600; font-size: 13px; color: #475569; display: block; margin-bottom: 6px;">Location *</label>
+                        <input type="text" id="adminLocation" placeholder="e.g. Bengaluru, Karnataka (or Remote)" required style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+                    </div>
+
+                    <div class="input-box">
+                        <label for="adminSalary" style="font-weight: 600; font-size: 13px; color: #475569; display: block; margin-bottom: 6px;">Annual Salary (₹ INR) *</label>
+                        <input type="number" id="adminSalary" placeholder="e.g. 1500000" min="1000" step="1000" required style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+                    </div>
+
+                    <div class="input-box">
+                        <label for="adminCategory" style="font-weight: 600; font-size: 13px; color: #475569; display: block; margin-bottom: 6px;">Category / Role Group *</label>
+                        <select id="adminCategory" required style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: white;">
+                            <option value="Software Development">Software Development</option>
+                            <option value="Web Development">Web Development</option>
+                            <option value="Cloud & DevOps">Cloud & DevOps</option>
+                            <option value="Data Science">Data Science & AI</option>
+                            <option value="Database Management">Database Management</option>
+                            <option value="UI / UX Design">UI / UX Design</option>
+                            <option value="Cyber Security">Cyber Security</option>
+                            <option value="Marketing">Marketing</option>
+                            <option value="Finance">Finance & Banking</option>
+                        </select>
+                    </div>
+
+                    <div class="input-box">
+                        <label for="adminSource" style="font-weight: 600; font-size: 13px; color: #475569; display: block; margin-bottom: 6px;">Recruitment Source *</label>
+                        <select id="adminSource" required style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; background: white;">
+                            <option value="Direct">Direct / Employer Posting</option>
+                            <option value="LinkedIn">LinkedIn</option>
+                            <option value="Indeed">Indeed</option>
+                            <option value="Naukri">Naukri</option>
+                            <option value="Glassdoor">Glassdoor</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="input-box" style="margin-top: 10px;">
+                    <label for="adminExternalUrl" style="font-weight: 600; font-size: 13px; color: #475569; display: block; margin-bottom: 6px;">External Apply URL (Optional, for LinkedIn/Indeed/Naukri jobs)</label>
+                    <input type="url" id="adminExternalUrl" placeholder="https://www.linkedin.com/jobs/view/..." style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px;">
+                </div>
+
+                <div class="input-box" style="margin-top: 10px;">
+                    <label for="adminDescription" style="font-weight: 600; font-size: 13px; color: #475569; display: block; margin-bottom: 6px;">Job Description & Required Competencies *</label>
+                    <textarea id="adminDescription" rows="4" placeholder="Detail the duties, technology stack, and qualifications needed (minimum 10 characters)..." required minlength="10" style="width: 100%; padding: 12px 14px; border: 1.5px solid #cbd5e1; border-radius: 8px; font-family: inherit;"></textarea>
+                </div>
+
+                <div style="display: flex; gap: 12px; margin-top: 20px;">
+                    <button type="submit" id="adminSaveBtn" class="primary-btn" style="padding: 12px 28px;">
+                        <i class="fa-solid fa-plus"></i> Save Opening
+                    </button>
+                    <button type="button" id="adminCancelEditBtn" class="cancel-btn" style="display: none;" onclick="resetAdminForm()">
+                        <i class="fa-solid fa-xmark"></i> Cancel Edit
+                    </button>
+                </div>
+            </form>
+        </section>
+
+        <!-- ================= ADMIN TABS (OPENINGS VS APPLICATIONS) ================= -->
+        <div class="admin-tabs">
+            <button type="button" class="admin-tab-btn active" id="tabOpeningsBtn" onclick="switchAdminTab('openings')">
+                <i class="fa-solid fa-list-check"></i> Manage Job Openings (<span id="countOpeningsTab">0</span>)
+            </button>
+            <button type="button" class="admin-tab-btn" id="tabAppsBtn" onclick="switchAdminTab('applications')">
+                <i class="fa-solid fa-users"></i> Candidate Applications & Resumes (<span id="countAppsTab">0</span>)
+            </button>
+        </div>
+
+        <!-- ================= TAB 1: MANAGE JOB OPENINGS ================= -->
+        <section id="manage-jobs-section" class="admin-card">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 14px;">
+                <h3 style="font-size: 18px; color: #1e293b;">
+                    <i class="fa-solid fa-briefcase" style="color: #1565ff;"></i> Active Job Listings Catalog
+                </h3>
+                <input
+                    type="text"
+                    id="adminTableSearch"
+                    placeholder="Search openings..."
+                    oninput="filterAdminJobsTable()"
+                    style="padding: 8px 14px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px; min-width: 240px;">
+            </div>
+
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Job Title & Category</th>
+                            <th>Company</th>
+                            <th>Location</th>
+                            <th>Salary (₹)</th>
+                            <th>Source</th>
+                            <th style="text-align: right;">Admin Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminJobsTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 30px;">Loading job openings...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ================= TAB 2: CANDIDATE APPLICATIONS & RESUMES ================= -->
+        <section id="applications-section" class="admin-card" style="display: none;">
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; margin-bottom: 20px; gap: 14px;">
+                <div>
+                    <h3 style="font-size: 18px; color: #1e293b;">
+                        <i class="fa-solid fa-file-lines" style="color: #10b981;"></i> Received Candidate Applications & Resumes
+                    </h3>
+                    <p style="color: #64748b; font-size: 13px; margin-top: 2px;">
+                        Review applicant contact details, attached resumes, and change candidate statuses.
+                    </p>
+                </div>
+                <button type="button" class="clear-btn" onclick="loadApplications()" style="padding: 8px 16px; font-size: 13px;">
+                    <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                </button>
+            </div>
+
+            <div class="table-responsive">
+                <table class="admin-table">
+                    <thead>
+                        <tr>
+                            <th>App ID</th>
+                            <th>Candidate Details</th>
+                            <th>Position Applied</th>
+                            <th>Resume File</th>
+                            <th>Submitted At</th>
+                            <th>Status</th>
+                            <th style="text-align: right;">Status Action</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminApplicationsTableBody">
+                        <tr>
+                            <td colspan="7" style="text-align: center; padding: 30px;">Loading candidate applications...</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Floating Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="admin.js"></script>
+</body>
+</html>

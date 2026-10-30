@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Job Portal | Register</title>
+    <link rel="stylesheet" href="login.css?v=2.1">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+</head>
+<body>
+
+    <div class="login-container">
+        <div class="login-box">
+
+            <div class="logo">
+                <i class="fa-solid fa-user-plus"></i>
+            </div>
+
+            <h1>Create Account</h1>
+            <p class="subtitle">Join Job Portal to explore & manage opportunities</p>
+
+            <!-- Message Notification -->
+            <div id="messageBox" class="message-box"></div>
+
+            <form id="registerForm" onsubmit="event.preventDefault(); registerUser();">
+
+                <!-- Full Name -->
+                <div class="input-box">
+                    <i class="fa-solid fa-user"></i>
+                    <input
+                        type="text"
+                        id="fullName"
+                        placeholder="Full Name"
+                        autocomplete="name"
+                        required
+                        minlength="2">
+                </div>
+
+                <!-- Email -->
+                <div class="input-box">
+                    <i class="fa-solid fa-envelope"></i>
+                    <input
+                        type="email"
+                        id="email"
+                        placeholder="Email Address"
+                        autocomplete="email"
+                        required>
+                </div>
+
+                <!-- Password -->
+                <div class="input-box password-box">
+                    <i class="fa-solid fa-lock"></i>
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Create Password (min 6 characters)"
+                        autocomplete="new-password"
+                        required
+                        minlength="6">
+                    <i class="fa-solid fa-eye toggle-password" onclick="toggleFieldPassword('password', this)" title="Show/Hide Password"></i>
+                </div>
+
+                <!-- Confirm Password -->
+                <div class="input-box password-box">
+                    <i class="fa-solid fa-shield-halved"></i>
+                    <input
+                        type="password"
+                        id="confirmPassword"
+                        placeholder="Confirm Password"
+                        autocomplete="new-password"
+                        required
+                        minlength="6">
+                    <i class="fa-solid fa-eye toggle-password" onclick="toggleFieldPassword('confirmPassword', this)" title="Show/Hide Password"></i>
+                </div>
+
+                <!-- Register Button -->
+                <button type="submit" id="registerBtn" class="submit-btn">
+                    <i class="fa-solid fa-user-check"></i>
+                    <span>Register</span>
+                </button>
+
+            </form>
+
+            <div class="register-link">
+                Already have an account?
+                <a href="login.html">Login here</a>
+            </div>
+
+            <div>
+                <a href="index.html" class="back-home">
+                    <i class="fa-solid fa-arrow-left"></i> Back to Job Portal
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+    <script>
+        function toggleFieldPassword(fieldId, iconElem) {
+            const field = document.getElementById(fieldId);
+            if (!field) return;
+
+            if (field.type === "password") {
+                field.type = "text";
+                iconElem.classList.remove("fa-eye");
+                iconElem.classList.add("fa-eye-slash");
+            } else {
+                field.type = "password";
+                iconElem.classList.remove("fa-eye-slash");
+                iconElem.classList.add("fa-eye");
+            }
+        }
+
+        function showMessage(text, isError) {
+            const box = document.getElementById("messageBox");
+            box.textContent = text;
+            box.className = "message-box " + (isError ? "error" : "success");
+        }
+
+        async function registerUser() {
+            const fullName = document.getElementById("fullName").value.trim();
+            const email = document.getElementById("email").value.trim();
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirmPassword").value;
+            const registerBtn = document.getElementById("registerBtn");
+
+            if (!fullName || !email || !password) {
+                showMessage("Please fill in all required fields.", true);
+                return;
+            }
+
+            if (fullName.length < 2) {
+                showMessage("Full name must be at least 2 characters.", true);
+                return;
+            }
+
+            if (password.length < 6) {
+                showMessage("Password must be at least 6 characters long.", true);
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                showMessage("Passwords do not match. Please re-enter.", true);
+                return;
+            }
+
+            const user = {
+                fullName: fullName,
+                email: email,
+                password: password,
+                role: "USER"
+            };
+
+            registerBtn.disabled = true;
+            registerBtn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Registering...';
+
+            try {
+                const response = await fetch("/users/register", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(user)
+                });
+
+                const data = await response.json().catch(() => null);
+
+                if (response.ok && data && (data.status === "SUCCESS" || data.id || data.userId)) {
+                    showMessage("Registration successful! Redirecting to login...", false);
+                    setTimeout(() => {
+                        window.location.href = "login.html";
+                    }, 1200);
+                } else {
+                    let errorMessage = "Registration failed. Please try again.";
+                    if (data && data.message) {
+                        errorMessage = data.message;
+                    } else if (data && data.errors) {
+                        errorMessage = Object.values(data.errors).join(", ");
+                    }
+                    showMessage(errorMessage, true);
+                    registerBtn.disabled = false;
+                    registerBtn.innerHTML = '<i class="fa-solid fa-user-check"></i> <span>Register</span>';
+                }
+            } catch (err) {
+                console.error("Register error:", err);
+                showMessage("Unable to connect to server. Please ensure backend is running.", true);
+                registerBtn.disabled = false;
+                registerBtn.innerHTML = '<i class="fa-solid fa-user-check"></i> <span>Register</span>';
+            }
+        }
+    </script>
+</body>
+</html>
